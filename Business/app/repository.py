@@ -42,10 +42,8 @@ class RestRepository(Repository):
 
     def query(self, category: str, date: str) -> list[Record]:
         url = f'{settings.STORAGE_URL}/records?category={category}&date={date}'
-        response = requests.get(url=url)
-        return response.json()
+        return requests.get(url=url).json()
 
     def report(self, category: str, date: str) -> Report:
         url = f'{settings.STORAGE_URL}/report?category={category}&date={date}'
-        response = requests.get(url=url)
-        return Report(**response.json())
+        return Report(**requests.get(url=url).json())

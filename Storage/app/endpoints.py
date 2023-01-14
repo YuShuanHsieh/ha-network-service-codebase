@@ -36,7 +36,7 @@ def query(category: str, date: str) -> List[Record]:
     return []
 
 
-@app.post('/report')
+@app.get('/report')
 def report(category: str, date: str) -> Report:
     data_list = query(category=category, date=date)
     report: Report = Report(category=category, date=date)
