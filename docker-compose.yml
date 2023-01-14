@@ -1,0 +1,74 @@
+version: '3.4'
+
+services:
+  business:
+    container_name: ch-business
+    image: ${CH_BUSINESS_IMG:-ch-business}
+    build:
+      context: ./Bussiness
+      cache_from:
+        - ${CH_BUSINESS_CACHE_IMG}
+    volumes:
+      - ./Bussiness/app:/app/app
+    entrypoint: [""]
+    command: ["python3","app/main.py"]
+    environment:
+      - WEB_PORT=8100
+      - INVENTORY_URL="http://ch-inventory:8200/api"
+      - STORAGE_URL="http://ch-storage:8300/api"
+    ports:
+      - 8100:8100
+    networks:
+      - ch
+
+  inventory:
+    container_name: ch-inventory
+    image: ${CH_INVENTORY_IMG:-ch-inventory}
+    build:
+      context: ./Inventory
+      cache_from:
+        - ${CH_INVENTORY_CACHE_IMG}
+    volumes:
+      - ./Inventory/app:/app/app
+    entrypoint: [""]
+    command: ["python3","app/main.py"]
+    environment:
+      - WEB_PORT=8200
+    ports:
+      - 8200:8200
+    networks:
+      - ch
+
+  storage:
+    container_name: ch-storage
+    image: ${CH_STORAGE_IMG:-ch-storage}
+    build:
+      context: ./Storage
+      cache_from:
+        - ${CH_STORAGE_CACHE_IMG}
+    volumes:
+      - ./storage/app:/app/app
+    entrypoint: [""]
+    command: ["python3","app/main.py"]
+    environment:
+      - WEB_PORT=8300
+    ports:
+      - 8300:8300
+    networks:
+      - ch
+  
+  proxy:
+    container_name: ch-proxy
+    image: nginx:1.23.3-alpine
+    ports:
+      - 80:80
+    depends_on:
+      - business
+    volumes:
+      - ./LoadBanlance/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - ch
+
+networks:
+  ch:
+    driver: bridge

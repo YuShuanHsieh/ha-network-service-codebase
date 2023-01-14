@@ -37,11 +37,11 @@ def order(orders: Orders) -> Result:
     return repository.save(record=record)
 
 
-@ app.post('/report')
+@app.get('/record')
+def query(category: str, date: str) -> list[Record]:
+    return repository.query(category=category, date=date)
+
+
+@app.post('/report')
 def report(category: str, date: str) -> Report:
-    return repository.report(category=category, date=date)
-
-
-@ app.post('/record')
-def record(category: str, date: str) -> list[Record]:
     return repository.report(category=category, date=date)
