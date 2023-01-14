@@ -1,7 +1,7 @@
-from collections import defaultdict
+from __future__ import annotations
 
 import logging
-from typing import Dict, List
+from collections import defaultdict
 
 from app.schema import Record
 from app.schema import Report
@@ -17,8 +17,9 @@ settings: Settings = get_settings()
 
 app: FastAPI = FastAPI()
 
-CACHE: Dict[str, Dict[str, List[Record]]
-            ] = defaultdict(lambda: defaultdict(list))
+CACHE: dict[
+    str, dict[str, list[Record]],
+] = defaultdict(lambda: defaultdict(list))
 
 
 @app.post('/records')
@@ -30,7 +31,7 @@ def save(record: Record) -> Result:
 
 
 @app.get('/records')
-def query(category: str, date: str) -> List[Record]:
+def query(category: str, date: str) -> list[Record]:
     if category_dict := CACHE.get(category):
         return category_dict.get(date)
     return []
@@ -48,7 +49,7 @@ def report(category: str, date: str) -> Report:
     return report
 
 
-@app.post("/clean")
+@app.post('/clean')
 def clean() -> Result:
     CACHE.clear()
     return Result.ok()

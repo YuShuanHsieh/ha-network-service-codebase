@@ -1,9 +1,10 @@
 from __future__ import annotations
-import base64
 
+import base64
 import logging
 
-from app.schema import Data, Inventory
+from app.schema import Data
+from app.schema import Inventory
 from app.settings import get_settings
 from app.settings import Settings
 from fastapi import FastAPI
