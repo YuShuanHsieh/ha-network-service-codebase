@@ -1,16 +1,19 @@
-from abc import ABC, abstractmethod
-import json
+from __future__ import annotations
+
 import logging
-from urllib import request
+from abc import ABC
+from abc import abstractmethod
+
 import requests
-from typing import List
-
-from app.settings import Settings, get_settings
-
-from app.schema import Record, Report, Result
+from app.schema import Record
+from app.schema import Report
+from app.schema import Result
+from app.settings import get_settings
+from app.settings import Settings
 
 
 logger: logging.Logger = logging.getLogger(__name__)
+
 settings: Settings = get_settings()
 
 
@@ -20,7 +23,7 @@ class Repository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def query(self, category: str, date: str) -> List[Record]:
+    def query(self, category: str, date: str) -> list[Record]:
         raise NotImplementedError()
 
     @abstractmethod
@@ -28,7 +31,7 @@ class Repository(ABC):
         raise NotImplementedError()
 
 
-URL_SAVE_RECORD: str = f"{settings.STORAGE_URL}/records"
+URL_SAVE_RECORD: str = f'{settings.STORAGE_URL}/records'
 
 
 class RestRepository(Repository):
@@ -37,14 +40,12 @@ class RestRepository(Repository):
         response = requests.post(url=URL_SAVE_RECORD, json=record.dict())
         return Result(**response.json())
 
-    def query(self, category: str, date: str) -> List[Record]:
-        response = requests.get(
-            url=f"{settings.STORAGE_URL}/records?category={category}&date={date}"
-        )
+    def query(self, category: str, date: str) -> list[Record]:
+        url = f'{settings.STORAGE_URL}/records?category={category}&date={date}'
+        response = requests.get(url=url)
         return response.json()
 
     def report(self, category: str, date: str) -> Report:
-        response = requests.get(
-            url=f"{settings.STORAGE_URL}/report?category={category}&date={date}"
-        )
+        url = f'{settings.STORAGE_URL}/report?category={category}&date={date}'
+        response = requests.get(url=url)
         return Report(**response.json())

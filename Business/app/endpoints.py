@@ -1,11 +1,19 @@
+from __future__ import annotations
+
 import logging
-from typing import List
 
+import requests
+from app.repository import Repository
+from app.repository import RestRepository
+from app.schema import Inventory
+from app.schema import order_to_record
+from app.schema import Orders
+from app.schema import Record
+from app.schema import Report
+from app.schema import Result
+from app.settings import get_settings
+from app.settings import Settings
 from fastapi import FastAPI
-from app.schema import Orders, Record, Report, Result
-from app.repository import Repository, RestRepository
-
-from app.settings import Settings, get_settings
 
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -19,17 +27,21 @@ URL_MATERIAL: str = f'{settings.INVENTORY_URL}/material'
 repository: Repository = RestRepository()
 
 
-@app.post("/order")
+@app.post('/order')
 def order(orders: Orders) -> Result:
-    logger.info(orders)
-    return Result.ok()
+    response = requests.post(url=URL_MATERIAL, json=orders.data.dict())
+    inventory: Inventory = Inventory(**response.json())
+    record: Record = order_to_record(orders)
+    record.material = inventory.material
+    record.signature = inventory.signature
+    return repository.save(record=record)
 
 
-@app.post("/report")
+@ app.post('/report')
 def report(category: str, date: str) -> Report:
     return repository.report(category=category, date=date)
 
 
-@app.post("/record")
-def record(category: str, date: str) -> List[Record]:
+@ app.post('/record')
+def record(category: str, date: str) -> list[Record]:
     return repository.report(category=category, date=date)

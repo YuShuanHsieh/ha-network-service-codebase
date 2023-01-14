@@ -4,4 +4,4 @@ build:
 	docker build -t ${PROJECT} .
 
 run:
-	docker run ${PROJECT}
+	docker run -p 8100:8100 ${PROJECT}
