@@ -1,7 +1,7 @@
-PROJECT=business
+PROJECT=storage
 
 build:
 	docker build -t ${PROJECT} .
 
 run:
-	docker run -p 8100:8100 ${PROJECT}
+	docker run -p 8300:8300 ${PROJECT}
