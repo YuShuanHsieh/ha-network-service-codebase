@@ -23,11 +23,11 @@ class Repository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def query(self, category: str, date: str) -> list[Record]:
+    def query(self, location: str, date: str) -> list[Record]:
         raise NotImplementedError()
 
     @abstractmethod
-    def report(self, category: str, date: str) -> Report:
+    def report(self, location: str, date: str) -> Report:
         raise NotImplementedError()
 
 
@@ -40,10 +40,10 @@ class RestRepository(Repository):
         response = requests.post(url=URL_SAVE_RECORD, json=record.dict())
         return Result(**response.json())
 
-    def query(self, category: str, date: str) -> list[Record]:
-        url = f'{settings.STORAGE_URL}/records?category={category}&date={date}'
+    def query(self, location: str, date: str) -> list[Record]:
+        url = f'{settings.STORAGE_URL}/records?location={location}&date={date}'
         return requests.get(url=url).json()
 
-    def report(self, category: str, date: str) -> Report:
-        url = f'{settings.STORAGE_URL}/report?category={category}&date={date}'
+    def report(self, location: str, date: str) -> Report:
+        url = f'{settings.STORAGE_URL}/report?location={location}&date={date}'
         return Report(**requests.get(url=url).json())

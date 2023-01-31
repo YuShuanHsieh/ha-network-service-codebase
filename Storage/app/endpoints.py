@@ -24,23 +24,23 @@ CACHE: dict[
 
 @app.post('/records')
 def save(record: Record) -> Result:
-    category_dict = CACHE[record.category]
-    records = category_dict[record.timestamp[0:10]]  # datetime to date
+    location_dict = CACHE[record.location]
+    records = location_dict[record.timestamp[0:10]]  # datetime to date
     records.append(record)
     return Result.ok()
 
 
 @app.get('/records')
-def query(category: str, date: str) -> list[Record]:
-    if category_dict := CACHE.get(category):
-        return category_dict.get(date)
+def query(location: str, date: str) -> list[Record]:
+    if location_dict := CACHE.get(location):
+        return location_dict.get(date)
     return []
 
 
 @app.get('/report')
-def report(category: str, date: str) -> Report:
-    data_list = query(category=category, date=date)
-    report: Report = Report(category=category, date=date)
+def report(location: str, date: str) -> Report:
+    data_list = query(location=location, date=date)
+    report: Report = Report(location=location, date=date)
     report.count = len(data_list)
     report.a = sum(r.a for r in data_list)
     report.b = sum(r.b for r in data_list)

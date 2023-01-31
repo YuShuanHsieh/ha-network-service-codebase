@@ -38,10 +38,10 @@ def order(orders: Orders) -> Result:
 
 
 @app.get('/record')
-def query(category: str, date: str) -> list[Record]:
-    return repository.query(category=category, date=date)
+def query(location: str, date: str) -> list[Record]:
+    return repository.query(location=location, date=date)
 
 
 @app.post('/report')
-def report(category: str, date: str) -> Report:
-    return repository.report(category=category, date=date)
+def report(location: str, date: str) -> Report:
+    return repository.report(location=location, date=date)
