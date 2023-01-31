@@ -31,7 +31,7 @@ class Data(BaseModel):
 
 
 class Orders(BaseModel):
-    category: str = Field(default='c1')
+    location: str = Field(default='l1')
     timestamp: str = Field(
         default_factory=get_isoformat,
         example='2023-01-01T00:00:00+08:00',
@@ -40,7 +40,7 @@ class Orders(BaseModel):
 
 
 class Record(BaseModel):
-    category: str = Field(default='c1')
+    location: str = Field(default='l1')
     timestamp: str = Field(example='2023-01-01T00:00:00+08:00')
     signature: str = Field(default='')
     material: float = Field(default=0.0)
@@ -51,7 +51,7 @@ class Record(BaseModel):
 
 
 class Report(BaseModel):
-    category: str = Field(default='c1')
+    location: str = Field(default='l1')
     date: str = Field(example='2023-01-01')
 
     count: int = Field(default=0)
@@ -64,7 +64,7 @@ class Report(BaseModel):
 
 def order_to_record(order: Orders) -> Record:
     return Record(
-        category=order.category,
+        location=order.location,
         timestamp=order.timestamp,
         a=order.data.a,
         b=order.data.b,
