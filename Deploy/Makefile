@@ -5,13 +5,13 @@ tools:
 	apt update && apt install docker.io docker-compose make -y
 
 business:
-	INVENTORY_URL=${INVENTORY_URL} STORAGE_URL=${STORAGE_URL} docker-compose -f docker-compose-single.yml up -d business
+	INVENTORY_URL=${INVENTORY_URL} STORAGE_URL=${STORAGE_URL} docker-compose  -f docker-compose-single.yml up --build -d business
 
 inventory:
-	docker-compose -f docker-compose-single.yml up -d inventory
+	docker-compose -f docker-compose-single.yml up -d --build inventory
 
 storage:
-	INVENTORY_URL=${INVENTORY_URL} STORAGE_URL=${STORAGE_URL} docker-compose -f docker-compose-single.yml up -d storage
+	INVENTORY_URL=${INVENTORY_URL} STORAGE_URL=${STORAGE_URL} docker-compose -f docker-compose-single.yml up -d --build storage
 
 proxy:
 	docker-compose -f docker-compose-single.yml up -d proxy		

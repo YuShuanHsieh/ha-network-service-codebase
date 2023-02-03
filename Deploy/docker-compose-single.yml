@@ -60,5 +60,5 @@ services:
     ports:
       - 80:80
     volumes:
-      - ../LoadBalance/nginx-single.conf:/etc/nginx/nginx.conf
+      - ../LoadBalance/nginx.conf:/etc/nginx/nginx.conf
     restart: always
