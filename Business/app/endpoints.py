@@ -42,6 +42,6 @@ def query(location: str, date: str) -> list[Record]:
     return repository.query(location=location, date=date)
 
 
-@app.post('/report')
+@app.get('/report')
 def report(location: str, date: str) -> Report:
     return repository.report(location=location, date=date)
